@@ -5,7 +5,7 @@
 <body>
     <form action="handler.php" method="POST">
         <img src="captcha.php" alt="captcha" id="captcha-image1">
-        <img src="img.php" alt="captcha" id="captcha-image">
+        <img src="ImgWord.php" alt="captcha" id="captcha-image">
         <br>
         <input type="text" name="code">
         <input type="submit" value="Продолжить">
