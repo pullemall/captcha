@@ -1,25 +1,28 @@
 <?php
-define("DIR", $_SERVER["DOCUMENT_ROOT"] . "/");
+class Captcha {
+	public function createWord() {
+		$w_arr1 = explode(" ", "Ва Хли шо Пы на мю ры Бра глу Ту гра пы стри Ба хра");
+		$w_arr2 = explode(" ", "рка вки рьки ря ве мзи мит нда що тум хнул лка жа раб бро");
+		$w_arr3 = explode(" ", "лни те ю щих им пе ра ме ны ле е ки бу ет");
+		$w_arr4 = explode(" ", "вля щу ю со ре ви ща пыл ста ми ка ри");
+		$w_arr5 = explode(" ", "лось лись ки шмыг бу ет нный ка ов ость");
+		$c = rand(0, 1);
+		$word = $w_arr1[array_rand($w_arr1)] . $w_arr2[array_rand($w_arr2)] . $w_arr3[array_rand($w_arr3)] . $w_arr4[array_rand($w_arr4)];
 
-$w_arr1 = explode(" ", "Ва Хли шо Пы на мю ры Бра глу Ту гра пы стри Ба хра");
-$w_arr2 = explode(" ", "рка вки рьки ря ве мзи мит нда що тум хнул лка жа раб бро");
-$w_arr3 = explode(" ", "лни те ю щих им пе ра ме ны ле е ки бу ет");
-$w_arr4 = explode(" ", "вля щу ю со ре ви ща пыл ста ми ка ри");
-$w_arr5 = explode(" ", "лось лись ки шмыг бу ет нный ка ов ость");
-$c = rand(0, 1);
-$word = $w_arr1[array_rand($w_arr1)] . $w_arr2[array_rand($w_arr2)] . $w_arr3[array_rand($w_arr3)] . $w_arr4[array_rand($w_arr4)];
+		if($c == 1){
+			$word .= $w_arr5[array_rand($w_arr5)];
+		}
 
-if($c == 1){
-	$word .= $w_arr5[array_rand($w_arr5)];
-}
+		session_start();
+		$_SESSION['captcha'] = $word;
+		session_write_close();
 
-session_start();
-$_SESSION['captcha'] = $word;
-session_write_close();
+		return $word;
+	}
 
-function img_code($code)
-{
-		$font = DIR . "fonts/georgia.ttf";
+	public function img_code() {
+		$code = $this->createWord();
+		$font = $_SERVER["DOCUMENT_ROOT"] . "/fonts/georgia.ttf";
 		$font_size = 20;
 		$img = imagecreate($font_size*mb_strlen($code), 30);
 		$imgx = imagesx($img);
@@ -50,8 +53,10 @@ function img_code($code)
 
 		imagepng($img);
 		imagedestroy($img);
+	}
 }
 header("Content-Type: image/jpeg");
 
-img_code($word);
+$captcha = new Captcha();
+$captcha->img_code();
 ?>
