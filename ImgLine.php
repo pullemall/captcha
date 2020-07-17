@@ -1,6 +1,4 @@
 <?php
-//namespace localhost;
-
 class ImgLine {
     const STATE_LINE = "state_line.json";
     const STATE_LINE_INNER = "state_line_inner.json";
@@ -8,18 +6,6 @@ class ImgLine {
     const IMG_NAME = "123.png";
     const IMG_LINE = "line.png";
     const IMG_LINE_INNER = "line_inner.png";
-
-/*     protected $img_name;
-    protected $black_pixels;
-    protected $spaces;
-    protected $white_count;
-
-    public function __construct($img_name, $black_pixels, $spaces, $white_count=1) {
-        $this->img_name = $img_name;
-        $this->black_pixels = $black_pixels;
-        $this->spaces = $spaces;
-        $this->white_count = $white_count; 
-    } */
 
     public function writeStates($filename, $value){
         $fd = json_encode($value);
@@ -108,7 +94,3 @@ class ImgLine {
     }
 
 }
-
-
-
-?>

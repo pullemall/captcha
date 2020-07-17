@@ -1,6 +1,4 @@
 <?php
-//namespace localhost;
-
 spl_autoload_register(function ($class_name) {
     include $class_name . '.php';
 });
@@ -126,9 +124,7 @@ class ImgWord extends ImgLine {
     }
 }
 
-
 header("Content-Type: image/png");
 
 $word = new ImgWord("line.png", 5, 7, 70);
 $word->getImage();
-?>

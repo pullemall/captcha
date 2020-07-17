@@ -20,7 +20,7 @@ class Captcha {
 		return $word;
 	}
 
-	public function img_code() {
+	public function createCaptcha() {
 		$code = $this->createWord();
 		$font = $_SERVER["DOCUMENT_ROOT"] . "/fonts/georgia.ttf";
 		$font_size = 20;
@@ -58,5 +58,4 @@ class Captcha {
 header("Content-Type: image/jpeg");
 
 $captcha = new Captcha();
-$captcha->img_code();
-?>
+$captcha->createCaptcha();
