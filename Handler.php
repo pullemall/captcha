@@ -25,30 +25,13 @@ class Handler extends ImgLine {
         $this->hash = md5($this->coords["x1"] . $y1 . ($this->coords['x2']-$this->coords['x1']) . ($y2 - $y1));
     }
 
-    public function levenshteinCheck($users_input, $words){
-        $lev_count = 0;
-        $tmp = count($words) > 9 ? 10 : count($words);
-        
-        for($i = 0; $i < $tmp; $i++){
-            if(levenshtein($users_input, $words[array_rand($words)]) <= 2){
-                $lev_count++;
-            }
-        }
-        
-        if($lev_count >= 5 || ($tmp < 5 && $lev_count >= 1)){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public function checkCode($users_input, $word, $hash){
+    public function checkCode(LevCheck $lev_check, $users_input, $word, $hash){
         $cap = $_SESSION["captcha"] ?? '';
     
         if($users_input[0] == $cap && mb_strlen($users_input[1]) > 0){
             if(isset($word[$hash])){
                 $words = $word[$hash];
-                if($this->levenshteinCheck($users_input[1], $words)){
+                if($lev_check->levenshteinCheck($users_input[1], $words)){
                     $words[] = $users_input[1];
                     $word[$hash] = $words;
                 }else{
@@ -71,13 +54,15 @@ class Handler extends ImgLine {
     }
 
     public function confirmCode(){
+        $lev_check = new LevCheck();
+
         if (isset($_POST['code']))
         {
             if ($_POST['code'] == '')
             {
                 exit("Input field is empty");
             }
-            if ($this->checkCode($this->users_input, $this->word, $this->hash))
+            if ($this->checkCode($lev_check, $this->users_input, $this->word, $this->hash))
             {
                 echo "Done!"; 
             }else{
@@ -85,6 +70,25 @@ class Handler extends ImgLine {
             }
         }else{
             exit("Access denied");
+        }
+    }
+}
+
+class LevCheck {
+    public function levenshteinCheck($users_input, $words){
+        $lev_count = 0;
+        $tmp = count($words) > 9 ? 10 : count($words);
+        
+        for($i = 0; $i < $tmp; $i++){
+            if(levenshtein($users_input, $words[array_rand($words)]) <= 2){
+                $lev_count++;
+            }
+        }
+        
+        if($lev_count >= 5 || ($tmp < 5 && $lev_count >= 1)){
+            return true;
+        }else{
+            return false;
         }
     }
 }
